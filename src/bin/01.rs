@@ -62,17 +62,44 @@ fn main() -> Result<()> {
     //endregion
 
     //region Part 2
-    // println!("\n=== Part 2 ===");
+    println!("\n=== Part 2 ===");
     //
-    // fn part2<R: BufRead>(reader: R) -> Result<usize> {
-    //     Ok(0)
-    // }
+    fn part2<R: BufRead>(reader: R) -> Result<usize> {
+        let lines: Vec<String> = reader.lines().map(|line| line.unwrap()).collect();
+
+        let mut left_column_list_as_str: Vec<u64> = lines.iter().map(|line| {
+            let mut parts = line.split_whitespace();
+            let left_column = parts.next().unwrap();
+            left_column.to_string().parse().unwrap()
+        }).collect();
+
+        let mut right_column_list_as_str: Vec<u64> = lines.iter().map(|line| {
+            let mut parts = line.split_whitespace();
+            parts.next();
+            let right_column = parts.next().unwrap();
+            right_column.to_string().parse().unwrap()
+        }).collect();
+        
+        //create new empty list mutable
+        let mut new_list: Vec<u64> = Vec::new();
+        
+        for elem in left_column_list_as_str.iter() {
+            let mut counter = 0;
+            for elem2 in right_column_list_as_str.iter() {
+                if elem == elem2 {
+                   counter += 1;
+                }
+            }
+            new_list.push(elem*counter);
+        }
+        Ok(new_list.iter().sum::<u64>() as usize)
+    }
     //
-    // assert_eq!(0, part2(BufReader::new(TEST.as_bytes()))?);
+    assert_eq!(31, part2(BufReader::new(TEST.as_bytes()))?);
     //
-    // let input_file = BufReader::new(File::open(INPUT_FILE)?);
-    // let result = time_snippet!(part2(input_file)?);
-    // println!("Result = {}", result);
+    let input_file = BufReader::new(File::open(INPUT_FILE)?);
+    let result = time_snippet!(part2(input_file)?);
+    println!("Result = {}", result);
     //endregion
 
     Ok(())
