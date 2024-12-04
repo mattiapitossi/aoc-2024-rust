@@ -60,6 +60,9 @@ fn main() -> Result<()> {
     let result = time_snippet!(part1(input_file)?);
     println!("Result = {}", result);
     //endregion
+    //=== Part 1 ===
+    // src/bin/01.rs:60 took 5.307291ms.
+    // Result = 1660292
 
     //region Part 2
     println!("\n=== Part 2 ===");
@@ -101,6 +104,9 @@ fn main() -> Result<()> {
     let result = time_snippet!(part2(input_file)?);
     println!("Result = {}", result);
     //endregion
+    //=== Part 2 ===
+    // src/bin/01.rs:101 took 9.631375ms.
+    // Result = 22776016
 
     Ok(())
 }
