@@ -40,7 +40,7 @@ fn main() -> Result<()> {
         vect.windows(2).all(|w| (1..=3).contains(&w[0].abs_diff(w[1]))) && is_either_increasing_or_decreasing(vect)
     }
 
-    //7 6 3 2 2, l=4, i=3, i+1=4
+
     fn check_if_safe_ignore_one(vect: &[u64]) -> bool {
         let vec = vect.to_vec();
         if check_if_safe(&vec) {
