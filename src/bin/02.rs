@@ -40,21 +40,12 @@ fn main() -> Result<()> {
         vect.windows(2).all(|w| (1..=3).contains(&w[0].abs_diff(w[1]))) && is_either_increasing_or_decreasing(vect)
     }
 
-
     fn check_if_safe_ignore_one(vect: &[u64]) -> bool {
-        let vec = vect.to_vec();
-        if check_if_safe(&vec) {
-            return true;
-        } else {
-            for i in 0..vec.len() {
-                let mut vec = vect.to_vec();
-                vec.remove(i);
-                if check_if_safe(&vec) {
-                    return true;
-                }
-            }
-        }
-        false
+        check_if_safe(vect) || (0..vect.len()).any(|i| {
+            let mut vec = vect.to_vec();
+            vec.remove(i);
+            check_if_safe(&vec)
+        })
     }
 
 
@@ -67,7 +58,7 @@ fn main() -> Result<()> {
     //endregion
 
     //region Part 2
-    println!("\n=== Part 2 ===");
+    println!("\n=== Part 2 ==="); //9.578542ms
     //
     fn part2<R: BufRead>(reader: R) -> Result<usize> {
         let count = reader.lines()
