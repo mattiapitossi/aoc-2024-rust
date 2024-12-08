@@ -27,7 +27,7 @@ fn main() -> Result<()> {
         let count = reader.lines()
             .filter_map(Result::ok)
             .map(|line| line.split_whitespace().map(|x| x.parse::<u64>().unwrap()).collect::<Vec<u64>>())
-            .filter(|vect_int| check_if_safe(vect_int) && is_either_increasing_or_decreasing(vect_int))
+            .filter(|vect_int| check_if_safe(vect_int))
             .count();
         Ok(count)
     }
@@ -37,7 +37,24 @@ fn main() -> Result<()> {
     }
 
     fn check_if_safe(vect: &[u64]) -> bool {
-        vect.windows(2).all(|w| (1..=3).contains(&w[0].abs_diff(w[1])))
+        vect.windows(2).all(|w| (1..=3).contains(&w[0].abs_diff(w[1]))) && is_either_increasing_or_decreasing(vect)
+    }
+
+    //7 6 3 2 2, l=4, i=3, i+1=4
+    fn check_if_safe_ignore_one(vect: &[u64]) -> bool {
+        let vec = vect.to_vec();
+        if check_if_safe(&vec) {
+            return true;
+        } else {
+            for i in 0..vec.len() {
+                let mut vec = vect.to_vec();
+                vec.remove(i);
+                if check_if_safe(&vec) {
+                    return true;
+                }
+            }
+        }
+        false
     }
 
 
@@ -50,17 +67,22 @@ fn main() -> Result<()> {
     //endregion
 
     //region Part 2
-     println!("\n=== Part 2 ===");
+    println!("\n=== Part 2 ===");
     //
-     fn part2<R: BufRead>(reader: R) -> Result<usize> {
-         Ok(0)
-     }
-    
-     assert_eq!(0, part2(BufReader::new(TEST.as_bytes()))?);
-    
-     let input_file = BufReader::new(File::open(INPUT_FILE)?);
-     let result = time_snippet!(part2(input_file)?);
-     println!("Result = {}", result);
+    fn part2<R: BufRead>(reader: R) -> Result<usize> {
+        let count = reader.lines()
+            .filter_map(Result::ok)
+            .map(|line| line.split_whitespace().map(|x| x.parse::<u64>().unwrap()).collect::<Vec<u64>>())
+            .filter(|vect_int| check_if_safe_ignore_one(vect_int))
+            .count();
+        Ok(count)
+    }
+
+    assert_eq!(4, part2(BufReader::new(TEST.as_bytes()))?);
+
+    let input_file = BufReader::new(File::open(INPUT_FILE)?);
+    let result = time_snippet!(part2(input_file)?);
+    println!("Result = {}", result);
     //endregion
 
     Ok(())
